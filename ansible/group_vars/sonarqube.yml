@@ -1,0 +1,9 @@
+sonarqube_version: "10.3.0.82913"
+sonarqube_download_url: "https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-10.3.0.82913.zip"
+sonarqube_install_path: "/opt/sonarqube"
+sonarqube_port: 9000
+sonarqube_docker_image: "sonarqube:community"
+sonarqube_container_name: "sonarqube"
+sonarqube_admin_user: "admin"
+sonarqube_admin_password: "admin123"
+

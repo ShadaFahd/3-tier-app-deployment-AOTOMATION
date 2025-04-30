@@ -1,0 +1,31 @@
+- name: Install dependencies
+  apt:
+    name: ["openjdk-11-jdk", "unzip", "wget", "docker.io"]
+    state: present
+    update_cache: yes
+
+- name: Enable and start Docker
+  systemd:
+    name: docker
+    enabled: yes
+    state: started
+
+- name: Add user to docker group
+  user:
+    name: azureuser
+    groups: docker
+    append: yes
+
+- name: Download SonarQube
+  get_url:
+    url: "{{ sonarqube_download_url }}"
+    dest: /tmp/sonarqube.zip
+
+- name: Unzip SonarQube
+  unarchive:
+    src: /tmp/sonarqube.zip
+    dest: "{{ sonarqube_install_path }}"
+    remote_src: yes
+
+- name: Start SonarQube
+  shell: nohup {{ sonarqube_install_path }}/sonarqube-{{ sonarqube_version }}/bin/linux-x86-64/sonar.sh start &

@@ -1,0 +1,49 @@
+- name: Install Node.js & npm
+  apt:
+    name: ["nodejs", "npm"]
+    state: present
+    update_cache: yes
+
+- name: Install Docker
+  apt:
+    name: ["docker.io"]
+    state: present
+    update_cache: yes
+
+- name: Enable and start Docker
+  systemd:
+    name: docker
+    enabled: yes
+    state: started
+
+- name: Add user to docker group
+  user:
+    name: azureuser
+    groups: docker
+    append: yes
+
+- name: Clone backend app from repo
+  git:
+    repo: "{{ backend_repo_url }}"
+    dest: /home/azureuser/backend
+
+- name: Install backend dependencies
+  npm:
+    path: /home/azureuser/backend
+
+- name: Generate backend .env file
+  copy:
+    dest: /home/azureuser/backend/.env
+    content: |
+      DB_HOST={{ backend_db_host }}
+      DB_USER={{ backend_db_user }}
+      DB_PASSWORD={{ backend_db_password }}
+      DB_NAME={{ backend_db_name }}
+      JWT_SECRET={{ jwt_secret }}
+      ALLOWED_ORIGINS={{ allowed_origins }}
+
+- name: Start backend app
+  shell: nohup npm start &
+  args:
+    chdir: /home/azureuser/backend
+

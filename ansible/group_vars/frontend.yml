@@ -1,0 +1,3 @@
+frontend_repo_url: "https://integrifyeducation@dev.azure.com/integrifyeducation/DevOps%20Labs%20and%20Projects/_git/authentication_app_frontend"
+frontend_app_port: 80
+backend_api_url: "http://10.0.2.5:3000"

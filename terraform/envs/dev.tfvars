@@ -1,0 +1,8 @@
+prefix               = "DevOps1-week9-shadaAlharbi-dev"
+location             = "Central India"
+vm_size              = "Standard_B1s"
+admin_username       = "shada"
+admin_password       = "Sh12345678!"
+sql_admin_username   = "shada1"
+sql_admin_password   = "Sh12345678!"
+db_sku               = "Basic"

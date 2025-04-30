@@ -1,0 +1,11 @@
+backend_repo_url: "https://integrifyeducation@dev.azure.com/integrifyeducation/DevOps%20Labs%20and%20Projects/_git/authentication_app_backend"
+backend_app_port: 3000
+backend_db_host: "devops1week9shadaalharbidev-sqlserver.database.windows.net"
+backend_db_user: "sqladmin"
+backend_db_password: "SuperSecureP@ssword123"
+backend_db_name: "DevOps1-week9-shadaAlharbi-dev-sqldb"
+jwt_secret: "ThisIsASecretKey"
+allowed_origins: "http://10.0.1.4:80"
+docker_image_name: "automation-app-backend"
+docker_tag: "latest"
+docker_registry: "docker.io"
