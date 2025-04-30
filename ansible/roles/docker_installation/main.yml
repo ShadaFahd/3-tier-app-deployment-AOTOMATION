@@ -54,3 +54,11 @@
   command: docker --version
   register: docker_version_check
   failed_when: docker_version_check.rc != 0
+
+  - name: Force reboot after Docker install to ensure group permissions take effect
+  reboot:
+    msg: "Rebooting after Docker installation"
+    pre_reboot_delay: 5
+    post_reboot_delay: 10
+  when: docker_check.rc != 0
+
