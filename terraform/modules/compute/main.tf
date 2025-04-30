@@ -291,3 +291,37 @@ resource "azurerm_linux_virtual_machine" "control_vm" {
   }
 }
 
+resource "azurerm_public_ip" "nat_gateway_ip" {
+  name                = "${var.prefix}-nat-pip"
+  location            = var.location
+  resource_group_name = var.resource_group_name
+  allocation_method   = "Static"
+  sku                 = "Standard"
+}
+
+resource "azurerm_nat_gateway" "nat_gateway" {
+  name                = "${var.prefix}-nat-gateway"
+  location            = var.location
+  resource_group_name = var.resource_group_name
+  sku_name            = "Standard"
+}
+
+resource "azurerm_nat_gateway_public_ip_association" "nat_ip_assoc" {
+  nat_gateway_id       = azurerm_nat_gateway.nat_gateway.id
+  public_ip_address_id = azurerm_public_ip.nat_gateway_ip.id
+}
+
+resource "azurerm_subnet_nat_gateway_association" "frontend_nat_assoc" {
+  subnet_id      = var.frontend_subnet_id
+  nat_gateway_id = azurerm_nat_gateway.nat_gateway.id
+}
+
+resource "azurerm_subnet_nat_gateway_association" "backend_nat_assoc" {
+  subnet_id      = var.backend_subnet_id
+  nat_gateway_id = azurerm_nat_gateway.nat_gateway.id
+}
+
+resource "azurerm_subnet_nat_gateway_association" "control_nat_assoc" {
+  subnet_id      = var.control_subnet_id
+  nat_gateway_id = azurerm_nat_gateway.nat_gateway.id
+}
