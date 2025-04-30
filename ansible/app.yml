@@ -46,7 +46,6 @@
         docker_network_name: app_net
         db_connection_string: ""
 
-# ✅ 6. ننشر تطبيق الباك على كل الـbackend VMs
 - hosts: backend
   become: true
   roles:
