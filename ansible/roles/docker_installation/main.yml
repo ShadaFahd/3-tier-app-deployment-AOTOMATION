@@ -22,7 +22,7 @@
 
 - name: Add Docker repository
   apt_repository:
-    repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable
+    repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
     state: present
   when: docker_check.rc != 0
 
@@ -47,3 +47,7 @@
     name: "{{ ansible_user }}"
     groups: docker
     append: yes
+
+- name: Reboot if user was added to docker group
+  reboot:
+  when: docker_check.rc != 0
