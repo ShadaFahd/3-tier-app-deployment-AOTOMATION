@@ -1,9 +1,10 @@
-- name: Check if Docker is already installed
+---
+- name: Check if Docker is installed
   command: which docker
   register: docker_check
   ignore_errors: true
 
-- name: Install required system packages
+- name: Install prerequisites
   apt:
     name:
       - apt-transport-https
@@ -21,14 +22,13 @@
     state: present
   when: docker_check.rc != 0
 
-- name: Add Docker APT repository for correct Ubuntu version
+- name: Add Docker repository
   apt_repository:
     repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_lsb.codename }} stable"
     state: present
-    filename: docker
   when: docker_check.rc != 0
 
-- name: Install Docker Engine
+- name: Install Docker
   apt:
     name:
       - docker-ce
@@ -38,27 +38,14 @@
     update_cache: yes
   when: docker_check.rc != 0
 
-- name: Ensure Docker service is running and enabled
+- name: Enable and start Docker
   systemd:
     name: docker
     enabled: true
     state: started
 
-- name: Add current user to docker group
+- name: Add user to docker group
   user:
     name: "{{ ansible_user }}"
     groups: docker
     append: yes
-
-- name: Confirm Docker is installed correctly
-  command: docker --version
-  register: docker_version_check
-  failed_when: docker_version_check.rc != 0
-
-- name: Force reboot after Docker install to ensure group permissions take effect
-  reboot:
-    msg: "Rebooting after Docker installation"
-    pre_reboot_delay: 5
-    post_reboot_delay: 10
-  when: docker_check.rc != 0
-

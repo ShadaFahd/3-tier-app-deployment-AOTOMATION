@@ -1,10 +1,11 @@
-- name: Create app directory
+---
+- name: Create application directory
   file:
     path: "{{ app_dest_dir }}"
     state: directory
     mode: '0755'
 
-- name: Copy app files to remote
+- name: Copy app files
   copy:
     src: "{{ app_src_dir }}/"
     dest: "{{ app_dest_dir }}/"

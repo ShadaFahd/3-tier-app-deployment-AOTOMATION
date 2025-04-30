@@ -1,3 +1,4 @@
+---
 - name: Pull SonarQube image
   community.docker.docker_image:
     name: sonarqube

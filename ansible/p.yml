@@ -1,4 +1,0 @@
-- hosts: frontend_vm_1,frontend_vm_2,backend_vm_2
-  become: yes
-  roles:
-    - docker_installation

@@ -1,4 +1,5 @@
-- name: Stop and remove Docker containers
+---
+- name: Stop and remove containers
   community.docker.docker_container:
     name: "{{ item }}"
     state: absent
@@ -12,13 +13,13 @@
   loop: "{{ docker_images }}"
   ignore_errors: yes
 
-- name: Remove custom Docker network
+- name: Remove Docker network
   community.docker.docker_network:
     name: "{{ docker_network_name }}"
     state: absent
   ignore_errors: yes
 
-- name: Remove directories
+- name: Delete directories
   file:
     path: "{{ item }}"
     state: absent

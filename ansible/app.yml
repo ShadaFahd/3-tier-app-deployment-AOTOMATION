@@ -1,40 +1,35 @@
 ---
-# ✅ 1. أول شيء: تأكد Docker مثبت على جميع الـVMs
 - hosts: all
   become: true
   roles:
-    - role: docker_installation
+    - docker_installation
 
-# ✅ 2. الآن نشغّل SonarQube فقط بعد ما تأكدنا Docker جاهز عليه
 - hosts: sonarqube
   become: true
   roles:
-    - role: sonarqube
+    - sonarqube
 
-# ✅ 3. الآن ننظف الشبكة والحاويات على كل VM
 - hosts: all
   become: true
   roles:
-    - role: cleanup
+    - cleanup
       vars:
-        docker_containers: [ frontend, backend ]
-        docker_images: [ frontend, backend ]
+        docker_containers: [frontend, backend]
+        docker_images: [frontend, backend]
         folders_to_delete: [ /tmp/frontend, /tmp/backend ]
         docker_network_name: app_net
 
-# ✅ 4. ننشئ شبكة Docker جديدة
 - hosts: all
   become: true
   roles:
-    - role: docker_network
+    - docker_network
       vars:
         docker_network_name: app_net
 
-# ✅ 5. ننشر تطبيق الفرونت على كل الـfrontend VMs
 - hosts: frontend
   become: true
   roles:
-    - role: application
+    - application
       vars:
         app_name: frontend
         app_image: frontend
@@ -49,7 +44,7 @@
 - hosts: backend
   become: true
   roles:
-    - role: application
+    - application
       vars:
         app_name: backend
         app_image: backend
