@@ -1,3 +1,8 @@
+- name: Check if Docker is already installed
+  command: which docker
+  register: docker_check
+  ignore_errors: yes
+
 - name: Install required packages
   apt:
     name:
@@ -7,17 +12,19 @@
       - software-properties-common
     state: present
     update_cache: yes
-  when: ansible_os_family == "Debian"
+  when: docker_check.rc != 0
 
 - name: Add Docker GPG key
   apt_key:
     url: https://download.docker.com/linux/ubuntu/gpg
     state: present
+  when: docker_check.rc != 0
 
 - name: Add Docker repository
   apt_repository:
     repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable
     state: present
+  when: docker_check.rc != 0
 
 - name: Install Docker CE
   apt:
@@ -27,15 +34,16 @@
       - containerd.io
     state: latest
     update_cache: yes
+  when: docker_check.rc != 0
+
+- name: Ensure Docker service is running
+  systemd:
+    name: docker
+    enabled: true
+    state: started
 
 - name: Add user to docker group
   user:
     name: "{{ ansible_user }}"
     groups: docker
     append: yes
-
-- name: Enable and start Docker
-  systemd:
-    name: docker
-    enabled: true
-    state: started
