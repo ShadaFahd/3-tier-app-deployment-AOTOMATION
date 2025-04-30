@@ -1,3 +1,25 @@
+- name: Ensure Docker daemon is running and accessible
+  hosts: all
+  become: true
+  tasks:
+    - name: Start Docker service
+      systemd:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: Add current user to docker group
+      user:
+        name: "{{ ansible_user }}"
+        groups: docker
+        append: yes
+
+    - name: Check Docker connectivity
+      command: docker info
+      register: docker_info
+      changed_when: false
+      failed_when: docker_info.rc != 0
+
 - name: Create a custom Docker network
   community.docker.docker_network:
     name: "{{ docker_network_name }}"
