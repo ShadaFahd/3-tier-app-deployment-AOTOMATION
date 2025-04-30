@@ -1,35 +1,46 @@
 ---
+# ✅ 1. تأكد أن Docker مثبت على جميع الـ VMs
 - hosts: all
   become: true
   roles:
-    - docker_installation
+    - role: docker_installation
 
+# ✅ 2. شغّل SonarQube على الـ backend_vm_1 فقط
 - hosts: sonarqube
   become: true
   roles:
-    - sonarqube
+    - role: sonarqube
 
+# ✅ 3. نظف الشبكة والحاويات والملفات المؤقتة
 - hosts: all
   become: true
   roles:
-    - cleanup
+    - role: cleanup
       vars:
-        docker_containers: [frontend, backend]
-        docker_images: [frontend, backend]
-        folders_to_delete: [ /tmp/frontend, /tmp/backend ]
+        docker_containers:
+          - frontend
+          - backend
+        docker_images:
+          - frontend
+          - backend
+        folders_to_delete:
+          - /tmp/frontend
+          - /tmp/backend
         docker_network_name: app_net
 
+# ✅ 4. أنشئ شبكة Docker
 - hosts: all
   become: true
   roles:
-    - docker_network
+    - role: docker_network
       vars:
         docker_network_name: app_net
 
+# ✅ 5. نشر تطبيق الواجهة frontend
 - hosts: frontend
   become: true
   roles:
-    - application
+    - role: application
       vars:
         app_name: frontend
         app_image: frontend
@@ -41,10 +52,11 @@
         docker_network_name: app_net
         db_connection_string: ""
 
+# ✅ 6. نشر تطبيق backend
 - hosts: backend
   become: true
   roles:
-    - application
+    - role: application
       vars:
         app_name: backend
         app_image: backend
