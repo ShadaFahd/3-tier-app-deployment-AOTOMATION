@@ -46,7 +46,6 @@
     pm2 startup systemd -u {{ ansible_user }} --hp /home/{{ ansible_user }}
 
 
----
 - name: Copy Backend files to VM
   copy:
     src: /home/azureuser/3-tier-app-automation/backend
