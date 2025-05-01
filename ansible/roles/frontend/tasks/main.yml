@@ -1,0 +1,52 @@
+---
+- name: Install curl and gnupg
+  ansible.builtin.apt:
+    name: [curl, gnupg]
+    state: present
+    update_cache: yes
+
+- name: Add Node.js 18.x APT key
+  ansible.builtin.shell: |
+    curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
+  args:
+    executable: /bin/bash
+
+- name: Install Node.js
+  ansible.builtin.apt:
+    name: nodejs
+    state: present
+
+- name: Install PM2 globally
+  community.general.npm:
+    name: pm2
+    global: yes
+
+- name: Create app directory
+  ansible.builtin.file:
+    path: "{{ frontend_app_path }}"
+    state: directory
+    mode: "0755"
+
+- name: Copy environment variables file
+  ansible.builtin.template:
+    src: env.j2
+    dest: "{{ frontend_app_path }}/.env"
+    mode: "0644"
+
+- name: Install npm dependencies
+  ansible.builtin.shell: |
+    cd {{ frontend_app_path }} && npm install
+  args:
+    chdir: "{{ frontend_app_path }}"
+
+- name: Build frontend app
+  ansible.builtin.shell: |
+    cd {{ frontend_app_path }} && npm run build
+  args:
+    chdir: "{{ frontend_app_path }}"
+
+- name: Start frontend app with PM2
+  ansible.builtin.shell: |
+    pm2 start {{ frontend_start_command }} --name "{{ frontend_pm2_process_name }}"
+    pm2 save
+    pm2 startup systemd -u {{ ansible_user }} --hp /home/{{ ansible_user }}

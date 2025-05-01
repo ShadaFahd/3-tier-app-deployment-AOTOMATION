@@ -1,0 +1,4 @@
+---
+frontend_app_path: /var/www/frontend
+frontend_pm2_process_name: frontend-app
+frontend_start_command: "npm start"
