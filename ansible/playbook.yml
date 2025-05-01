@@ -13,7 +13,7 @@
   tasks:
     - name: Setup Backend Node.js Environment
       include_role:
-        name: roles/backend_nodejs_setup
+        name: roles/backend
       vars:
         backend_database_url: "jdbc:mysql://{{ DB_SERVER }}:3306/{{ DB_NAME }}"
 
@@ -25,6 +25,6 @@
   tasks:
     - name: Setup Frontend Node.js Environment
       include_role:
-        name: roles/frontend_nodejs_setup
+        name: roles/frontend
       vars:
         backend_url: "https://{{ NEXT_PUBLIC_API_URL }}"
