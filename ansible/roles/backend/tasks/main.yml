@@ -1,4 +1,3 @@
----
 - name: Install curl and gnupg
   ansible.builtin.apt:
     name: [curl, gnupg]
@@ -20,47 +19,36 @@
   community.general.npm:
     name: pm2
     global: yes
+    state: present
 
-- name: Create app directory
+- name: Create backend app directory
   ansible.builtin.file:
-    path: "{{ backend_app_path }}"
+    path: /var/www/backend
     state: directory
+    mode: "0755"
+
+- name: Copy backend files from control node
+  ansible.builtin.copy:
+    src: /home/azureuser/3-tier-app-automation/backend/
+    dest: /var/www/backend/
+    owner: www-data
+    group: www-data
     mode: "0755"
 
 - name: Copy environment variables file
   ansible.builtin.template:
     src: env.j2
-    dest: "{{ backend_app_path }}/.env"
+    dest: /var/www/backend/.env
     mode: "0644"
 
 - name: Install npm dependencies
-  ansible.builtin.shell: |
-    cd {{ backend_app_path }} && npm install
+  ansible.builtin.command: npm install
   args:
-    chdir: "{{ backend_app_path }}"
+    chdir: /var/www/backend
+    creates: /var/www/backend/node_modules
 
 - name: Start backend app with PM2
   ansible.builtin.shell: |
     pm2 start {{ backend_start_command }} --name "{{ backend_pm2_process_name }}"
     pm2 save
     pm2 startup systemd -u {{ ansible_user }} --hp /home/{{ ansible_user }}
-
-
-- name: Copy Backend files to VM
-  copy:
-    src: /home/azureuser/3-tier-app-automation/backend
-    dest: /var/www/backend/
-    owner: www-data
-    group: www-data
-    mode: '0755'
-
-- name: Install npm dependencies for Backend
-  command: "cd /var/www/backend && npm install"
-  args:
-    creates: /var/www/backend/node_modules
-
-- name: Install PM2 globally for Backend
-  npm:
-    name: pm2
-    global: yes
-    state: present

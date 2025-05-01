@@ -4,11 +4,15 @@
   become: true
   roles:
     - docker_install
+    
+- name: Configure Backend VMs
+  hosts: backend
+  become: yes
+  roles:
+    - backend
 
-- name: Setup 3-Tier Application
-  hosts: all
-  become: true
-
+- name: Configure Frontend VMs
+  hosts: frontend
+  become: yes
   roles:
     - frontend
-    - backend
