@@ -50,3 +50,16 @@
     pm2 start {{ frontend_start_command }} --name "{{ frontend_pm2_process_name }}"
     pm2 save
     pm2 startup systemd -u {{ ansible_user }} --hp /home/{{ ansible_user }}
+
+- name: Copy Frontend files to VM
+  copy:
+    src: /home/azureuser/3-tier-app-automation/frontend
+    dest: /var/www/frontend/
+    owner: www-data
+    group: www-data
+    mode: '0755'
+
+- name: Install npm dependencies for Frontend
+  command: "cd /var/www/frontend && npm install"
+  args:
+    creates: /var/www/frontend/node_modules
