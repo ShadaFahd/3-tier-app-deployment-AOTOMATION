@@ -4,7 +4,7 @@
   become: true
   roles:
     - docker_install
-    
+
 - name: Configure Backend VMs
   hosts: backend
   become: yes
@@ -16,3 +16,9 @@
   become: yes
   roles:
     - frontend
+
+- name: Setup SonarQube
+  hosts: sonarqube
+  become: yes
+  roles:
+    - sonarqube
