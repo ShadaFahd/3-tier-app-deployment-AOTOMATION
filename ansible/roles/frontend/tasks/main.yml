@@ -28,7 +28,7 @@
 
 - name: Copy frontend files from control node
   ansible.builtin.copy:
-    src: /home/azureuser/3-tier-app-automation/frontend/
+    src: frontend/
     dest: /var/www/frontend/
     owner: www-data
     group: www-data

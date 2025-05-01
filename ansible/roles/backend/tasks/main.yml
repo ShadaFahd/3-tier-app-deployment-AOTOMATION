@@ -29,7 +29,7 @@
 
 - name: Copy backend files from control node
   ansible.builtin.copy:
-    src: /home/azureuser/3-tier-app-automation/backend/
+    src: backend/
     dest: /var/www/backend/
     owner: www-data
     group: www-data
