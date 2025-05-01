@@ -4,3 +4,27 @@
   become: true
   roles:
     - docker_install
+
+- name: Setup Backend Environments
+  hosts: backend
+  become: yes
+  vars:
+    backend_app_path: /var/www/backend
+  tasks:
+    - name: Setup Backend Node.js Environment
+      include_role:
+        name: roles/backend_nodejs_setup
+      vars:
+        backend_database_url: "jdbc:mysql://{{ DB_SERVER }}:3306/{{ DB_NAME }}"
+
+- name: Setup Frontend Environments
+  hosts: frontend
+  become: yes
+  vars:
+    frontend_app_path: /var/www/frontend
+  tasks:
+    - name: Setup Frontend Node.js Environment
+      include_role:
+        name: roles/frontend_nodejs_setup
+      vars:
+        backend_url: "https://{{ NEXT_PUBLIC_API_URL }}"
