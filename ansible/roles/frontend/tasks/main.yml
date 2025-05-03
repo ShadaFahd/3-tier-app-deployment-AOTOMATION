@@ -28,8 +28,8 @@
 
 - name: Copy frontend files from control node
   ansible.builtin.copy:
-    src: frontend/
-    dest: /var/www/frontend/
+    src: ../frontend/
+    dest: /home/azureuser/frontend/
     owner: www-data
     group: www-data
     mode: "0755"

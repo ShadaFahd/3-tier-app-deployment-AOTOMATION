@@ -29,8 +29,8 @@
 
 - name: Copy backend files from control node
   ansible.builtin.copy:
-    src: backend/
-    dest: /var/www/backend/
+    src: ../backend/
+    dest: /home/azureuser/backend/
     owner: www-data
     group: www-data
     mode: "0755"
