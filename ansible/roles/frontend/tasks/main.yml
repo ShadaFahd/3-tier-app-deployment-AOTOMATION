@@ -33,6 +33,7 @@
     owner: www-data
     group: www-data
     mode: "0755"
+  delegate_to: localhost
 
 - name: Copy environment variables file
   ansible.builtin.template:
