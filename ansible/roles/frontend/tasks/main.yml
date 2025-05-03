@@ -28,12 +28,11 @@
 
 - name: Copy frontend files from control node
   ansible.builtin.copy:
-    src: ../../../../frontend/
+    src: frontend/
     dest: /home/azureuser/frontend/
     owner: www-data
     group: www-data
     mode: "0755"
-  delegate_to: localhost
 
 - name: Copy environment variables file
   ansible.builtin.template:
