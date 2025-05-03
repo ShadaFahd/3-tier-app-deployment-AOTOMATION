@@ -22,7 +22,7 @@
 
 - name: Create frontend app directory
   ansible.builtin.file:
-    path: /var/www/frontend
+    path: /home/azureuser/frontend
     state: directory
     mode: "0755"
 
@@ -30,27 +30,27 @@
   ansible.builtin.copy:
     src: ../frontend/
     dest: /home/azureuser/frontend/
-    owner: www-data
-    group: www-data
+    owner: azureuser
+    group: azureuser
     mode: "0755"
   delegate_to: localhost
 
 - name: Copy environment variables file
   ansible.builtin.template:
     src: env.j2
-    dest: /var/www/frontend/.env
+    dest: /home/azureuser/frontend/.env
     mode: "0644"
 
 - name: Install npm dependencies
   ansible.builtin.command: npm install
   args:
-    chdir: /var/www/frontend
-    creates: /var/www/frontend/node_modules
+    chdir: /home/azureuser/frontend
+    creates: /home/azureuser/frontend/node_modules
 
 - name: Build frontend app
   ansible.builtin.command: npm run build
   args:
-    chdir: /var/www/frontend
+    chdir: /home/azureuser/frontend
 
 - name: Start frontend app with PM2
   ansible.builtin.shell: |
