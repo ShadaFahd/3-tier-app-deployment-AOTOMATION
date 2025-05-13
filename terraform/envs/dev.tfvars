@@ -1,6 +1,6 @@
 prefix               = "DevOps1-week9-shadaAlharbi-dev"
-location             = "Central India"
-vm_size              = "Standard_B1s"
+location             = "eastus2"
+vm_size              = "Standard_D2s_v3"
 admin_username       = "shada"
 admin_password       = "Sh12345678!"
 sql_admin_username   = "shada1"
