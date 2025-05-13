@@ -3,6 +3,7 @@
 
 This project automates the deployment of a 3-tier web application using Terraform, Ansible, Docker, and Azure DevOps. It includes infrastructure provisioning, application containerization, and CI/CD pipelines.
 
+![image](https://github.com/user-attachments/assets/b09ba903-ba4e-4f11-8eba-d37f1802a91b)
 
 ## 🛠️ Technologies Used
 
